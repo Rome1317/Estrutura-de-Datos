@@ -1,0 +1,169 @@
+Tree* user_tree;
+
+class Tree :Coordinator {
+	Coordinator* root = NULL;
+
+public:
+	void AddUser(Coordinator userdata) {
+
+		Coordinator* new_user = new Coordinator;
+		*new_user = userdata;
+
+		if (root == NULL) {
+
+			root = new_user;
+		}
+		else {
+
+			_AddUser(&root, new_user, root);
+
+		}
+	}
+	void _AddUser(Coordinator** node, Coordinator* n, Coordinator* dad) {
+
+		Coordinator* aux;
+		aux = *node;
+
+		if (aux == NULL) {
+
+			n->father = dad; // Guarda el papa del nodo
+			*node = n; // Guarda la informacion en el nodo
+
+			if (n->father->left != NULL) {
+				if (strcmp(n->father->left->username, n->username) == 0) {
+					n->father->left = n; //Guarda el hijo izquierdo en el papa
+					*node = n;
+				}
+			}
+			else if (n->father->right != NULL) {
+				if (strcmp(n->father->right->username, n->username) == 0) {
+					n->father->right = n; //Guarda el hijo derecho en el papa
+					*node = n;
+				}
+			}
+		}
+		else {
+
+			if (strcmp(aux->username, n->username) != 0) {
+
+				if (strcmp(n->username, aux->username) > 0) { // Z > A
+					_AddUser(&aux->right, n, aux);
+				}
+				if (strcmp(n->username, aux->username) < 0) {
+					_AddUser(&aux->left, n, aux);
+
+				}
+			}
+			else {
+				exits = 1;
+			}
+
+		}
+	}
+	void FindUser(Coordinator* temp) {
+
+		user_data = NULL;
+		user_data = _FindUser(root, temp);
+
+	}
+	Coordinator* _FindUser(Coordinator* node, Coordinator* temp) {
+
+
+		if (node != NULL) {
+			if (strcmp(temp->username, node->username) == 0) {
+				found = 1;
+				return node;
+			}
+			else if (node->left == NULL && node->right == NULL) {
+				found = 0;
+				MessageBox(NULL, "No existe coordinador con ese usuario", "Error", MB_ICONINFORMATION);
+			}
+			else {
+
+				if (strcmp(temp->username, node->username) > 0) {
+					_FindUser(node->right, temp);
+				}
+				else {
+					_FindUser(node->left, temp);
+				}
+			}
+
+		}
+		else {
+
+			found = 0;
+			MessageBox(NULL, "No ha ingresado a ningun coordinador.", "Error", MB_ICONINFORMATION);
+		}
+	}
+	void DeleteUser(Coordinator* node) {
+
+		if (node->left == NULL && node->right == NULL && node->father == NULL) { // Elimina la raiz
+
+			root = node->right;
+		}
+
+		if (node->left != NULL && node->right != NULL) {
+			Coordinator* minor = Smallest(node->right);
+			*node->username = *minor->username; // Se pasa todo el contenido del menor excepto los punteros a el nodo que se quiere eliminar
+			DeleteUser(minor); // Se elimina el menor
+		}
+		else if (node->left != NULL) {
+			Replace(node, node->left);
+			_DeleteUser(node);
+		}
+		else if (node->right != NULL) {
+			Replace(node, node->right);
+			_DeleteUser(node);
+		}
+		else {
+			Replace(node, NULL);
+			_DeleteUser(node);
+		}
+
+	}
+
+	Coordinator* Smallest(Coordinator* node) {
+		if (node == NULL) {
+			return NULL;
+		}
+		if (node->left) {
+			return Smallest(node->left);
+		}
+		else {
+			return node;
+		}
+
+	}
+
+	void Replace(Coordinator* node, Coordinator* replacement) {
+		if (node->father != NULL) {
+			if (node->father->left != NULL) {
+				if (strcmp(node->username, node->father->left->username) == 0) {
+					node->father->left = replacement; //Reemplaza al nodo por su antecesor
+				}
+				if (node->father->right != 0) {
+					if (strcmp(node->username, node->father->right->username) == 0) {
+						node->father->right = replacement;
+					}
+				}
+			}
+
+		}
+		if (replacement != NULL) {
+			replacement->father = node->father;// Enlaza el nodo padre 
+			if (node == root && node->right == NULL) {
+				root = node->left;
+			}
+			else if (node == root && node->left == NULL) {
+				root = node->right;
+			}
+		}
+	}
+
+	void _DeleteUser(Coordinator* node) {
+		node->right = NULL;
+		node->left = NULL;
+		delete node;
+
+	}
+};

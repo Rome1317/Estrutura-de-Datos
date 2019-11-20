@@ -1,0 +1,154 @@
+#ifdef Tree
+#define Tree
+
+class nodo_usuario {
+
+char user[10];
+char pass[10];
+char nombre[30];
+char foto[_MAX_PATH];
+short rol;
+short id_carrera;
+nodo_ususario(){}
+~nodo_ususario(){}
+nodo_usuario *izq;
+nodo_usuario *der;
+
+};
+
+class tree::nodo_suario {
+private:
+nodo_usuario *root=NULL;
+
+public:
+//insertar en un ABB(Arbol Binario de Busqueda)
+void agregarNodo(nodo_ususario data){
+noodo_usuario *nuevo=new nodo_usuario;
+CopiaDatos(nuevo,data);
+ if(root==NULL){
+ root = nuevo;
+ }
+ else{
+ Agrega(&root,data);
+ }
+
+}
+
+void Agrega(nodo_suario **nodo,nodo_ususario n){
+nodo_usuario *aux=*nodo;
+ if(aux==NULL){
+ *nodo=n;
+}
+ else{
+  if(strcmpr(aux->user,n->user)!=0){
+   if(strcmp(n->user,nodo->user)>0){
+   Agrega(&aux->der,n);
+   }
+   if(strcmp(n->user,nodo->user)<0){
+   Agrega(&aux->izq,n);
+   }
+  }
+ }
+}
+void CopiaDatos(nodo_suario *nodo,nodo_ususario data){
+strcpy(nodo->user,data.user);
+strcpy(nodo->pass,data.pass);
+strcpy(nodo->nombre,data.nombre);
+strcpy(nodo->foto,data.foto);
+nodo->id_carrera=data.id_carrera;
+nodo->der=0;
+nodo->izq=0;
+}
+
+void Buscar(nodo-usuario temp){
+nodo_usuario * aux;
+aux=BuscaNodo(root,temp);
+}
+
+nodo_usuario *BuscarNodo(nodo-usuario* nodo,nodo_usuario temp){
+ if(nodo!=0){
+  if(nodo->izq=0 && nodo->der=0){
+  printf("noexiste");
+  }
+  else{
+  if(strcmp(nodo->user,temp.user)==0){
+  return nodo;
+  }
+  else{   
+
+  }
+ }
+}
+
+}
+
+void Mostrar(){
+InOrden(root);
+}
+
+
+void PreOrden(nodo_usuario *nodo){
+ if(nodo!=NULL){
+ printf("%s\t%s\n",nodo->user,nodo->nombre);
+ InOrden(nodod->izq); 
+ InOrden(nodod->der);
+ }
+}
+
+void inOrden(nodo_usuario *nodo){
+ if(nodo!=NULL){
+ InOrden(nodod->izq);
+ printf("%s\t%s\n",nodo->user,nodo->nombre);
+ InOrden(nodod->der);
+ }
+}
+
+PostOrden(nodo_usuario *nodo){
+ if(nodo!=NULL){
+ InOrden(nodod->izq);
+ InOrden(nodod->der); 
+ printf("%s\t%s\n",nodo->user,nodo->nombre);
+ }
+}
+
+};
+#endif//!tree
+
+/*en el menu
+#include "Tree.h"
+agregar en el menu de opciones 
+---arbol---
+agregar usuario
+buscar usuario
+mostrar usuario
+
+En el source:
+ 
+nodo_usuario Captura usuario();
+
+nodo_usuario Captura usuario(){
+ nodo_usuario datitos;
+ cout<<"user:";
+ cin>>datitos.user;
+ cout<<"user:";
+ cin>>datitos.nombre;
+ cout<<"user:";
+ cin>>datitos.id_carrera;
+ strcpy(datitos.pass,"");
+ strcpy(datitos.foto,"");
+ datitos.izq=0;
+ daitos.der=0;
+}
+al momnet de bucar:
+nodo_usuario temp_user=Captura usuario();
+AgregarNodo();
+Arbolsuario.AgregarNodo(temp_user);
+tree ArbolUsuarios;
+
+en las opciones:
+1 PreOrden(root);
+2 inOrden(root);
+3 PostOrden(root);
+bucar:
+cin>>tmp_user
+ArbolUsuario.Bucar(temp_user);*/
